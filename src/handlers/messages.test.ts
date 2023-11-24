@@ -38,6 +38,8 @@ const rcMessage: RcMessage = {
 
 const matrixMessage: MatrixMessage = {
   body: 'Test',
+  formatted_body: '<p>Test</p>\n',
+  format: 'org.matrix.custom.html',
   msgtype: 'm.text',
   type: 'm.room.message',
 }

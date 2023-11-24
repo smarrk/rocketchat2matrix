@@ -14,6 +14,8 @@ import { axios, formatUserSessionOptions } from '../helpers/synapse'
 import reactionKeys from '../reactions.json'
 import { executeAndHandleMissingMember } from './rooms'
 import { AxiosError } from 'axios'
+import { marked } from 'marked'
+import { textEmoji } from 'markdown-to-text-emoji'
 
 const applicationServiceToken = process.env.AS_TOKEN || ''
 if (!applicationServiceToken) {
@@ -56,6 +58,8 @@ export type RcMessage = {
  */
 export type MatrixMessage = {
   body: string
+  formatted_body: string
+  format: 'org.matrix.custom.html'
   msgtype: 'm.text'
   type: 'm.room.message'
   'm.relates_to'?: {
@@ -83,6 +87,8 @@ export type ReactionKeys = {
 export function mapMessage(rcMessage: RcMessage): MatrixMessage {
   return {
     body: rcMessage.msg,
+    formatted_body: textEmoji(marked(rcMessage.msg, { gfm: true, breaks: true })),
+    format: 'org.matrix.custom.html',
     msgtype: 'm.text',
     type: 'm.room.message',
   }
